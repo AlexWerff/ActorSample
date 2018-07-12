@@ -10,6 +10,8 @@ class Main {
       implicit val materializer = ActorMaterializer()
       implicit val executionContext = system.dispatcher
     
-      system.actorOf(RESTActor.props(), "RESTActor")
+      val processorActor = system.actorOf(OrderProcessorActor.props(), "OrderProcessorActor")
+      val restActor = system.actorOf(RESTActor.props(), "RESTActor")
+      restActor ! RESTActor.Initialise(processorActor)
    }
 }
