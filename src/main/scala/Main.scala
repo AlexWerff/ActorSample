@@ -9,5 +9,7 @@ class Main {
       implicit val system = ActorSystem("modelbackend")
       implicit val materializer = ActorMaterializer()
       implicit val executionContext = system.dispatcher
+    
+      system.actorOf(RESTActor.props(), "RESTActor")
    }
 }
