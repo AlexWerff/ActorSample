@@ -8,7 +8,12 @@ import data._
   */
 class RESTActor extends Actor{
    override def receive: Receive = {
-      case AuthenticationRequest(username, password) => {
+       case RESTActor.Initialised(processorActor) => context.become(initialised(processorActor))
+       case _ => sender() ! ErrorResponse("Not initialised")
+   }
+ 
+   def initialised(processorActor:ActorRef):Recieve = {
+       case AuthenticationRequest(username, password) => {
          //DO AUTH CHECK
          context.become(authenticated("API_KEY"))
       }
@@ -23,6 +28,6 @@ class RESTActor extends Actor{
 }
 
 object RESTActor{
-   case class Initialise()
+   case class Initialise(processorActor:ActorRef)
    def props():Props= Props(new RESTActor())
 }
